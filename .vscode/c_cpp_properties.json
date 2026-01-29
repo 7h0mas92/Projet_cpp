@@ -1,0 +1,22 @@
+{
+  //Reconnaître SFML et ne plus afficher d'erreurs
+  //Utiliser C++17
+  //Activer l'auto-complétion
+  "configurations": [
+    {
+      "name": "Mac",
+      "includePath": ["${workspaceFolder}", "/opt/homebrew/opt/sfml/include"],
+      "defines": [],
+      "macFrameworkPath": [
+        "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+      ],
+      "compilerPath": "/usr/bin/clang++",
+      //Configure le standard C++ pour que l'auto-complétion comprenne la syntaxe
+      "cStandard": "c17",
+      "cppStandard": "c++17",
+      //Active IntelliSense (l'auto-complétion de VS Code)(ligne la plus importante)
+      "intelliSenseMode": "macos-clang-arm64"
+    }
+  ],
+  "version": 4
+}
