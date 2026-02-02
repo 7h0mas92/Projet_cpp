@@ -83,6 +83,20 @@ int main() {
             snake[0].y < 0 || snake[0].y >= rows) {
             // TODO : gérer le game over
         }
+            // wrap autour de la grille (tunnel)
+            if (snake[0].x < 0) {
+                snake[0].x = cols - 1;
+            }
+            else if (snake[0].x >= cols) {
+                snake[0].x = 0;
+            }
+
+            if (snake[0].y < 0) {
+                snake[0].y = rows - 1;
+            }
+            else if (snake[0].y >= rows) {
+                snake[0].y = 0;
+            }
 
 
             // 1) Nouvelle position de tête
