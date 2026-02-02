@@ -11,8 +11,11 @@ struct Cell {
 
 
 int main() {
+    srand(time(0));  // Initialiser le générateur aléatoire
+    
     //Une fenêtre 800x600 intitulée "Snake SFML"
     sf::RenderWindow window(sf::VideoMode({800, 600}), "Snake SFML");
+    window.setFramerateLimit(60);  // Limiter à 60 FPS
 
     // Paramètres de grille
     int cellSize = 20;
@@ -82,7 +85,23 @@ int main() {
         if (snake[0].x < 0 || snake[0].x >= cols ||
             snake[0].y < 0 || snake[0].y >= rows) {
             // TODO : gérer le game over
-        }
+               }
+            // ou bien : remettre le serpent et la direction comme au début 
+
+            // wrap autour de la grille (tunnel)
+            if (snake[0].x < 0) {
+                snake[0].x = cols - 1;
+            }
+            else if (snake[0].x >= cols) {
+                snake[0].x = 0;
+            }
+
+            if (snake[0].y < 0) {
+                snake[0].y = rows - 1;
+            }
+            else if (snake[0].y >= rows) {
+                snake[0].y = 0;
+            }
 
 
             // 1) Nouvelle position de tête
