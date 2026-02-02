@@ -66,7 +66,7 @@ CFLAGS = -Wall -Wextra -std=c++17 -DSFML_STATIC
 INC = -I./include
 LIB_PATH = $(SFML_LIBS)
 
-SRC = main.cpp caracter.cpp
+SRC = src/main.cpp src/caracter.cpp
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
