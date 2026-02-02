@@ -6,25 +6,24 @@ Ce projet sert d'exemple pour expliquer le fonctionnement d'un Makefile. Il s'ag
 
 Le Makefile de ce projet est conçu pour compiler un jeu simple en C++ avec les fichiers suivants:
 - `main.cpp`
-- `Character.cpp`
-- `Game.cpp`
+- `caracter.cpp`
 
 ## Explication du Makefile
 
 ### Variables de Configuration
 
 ```make
-NAME = monjeu
+NAME = jeu
 
 CC = g++
-CFLAGS = -Wall -Wextra -std=c++17
+CFLAGS = -Wall -Wextra -std=c++17 -DSFML_STATIC
 INC = -I./include
 
-SRC = main.cpp Character.cpp Game.cpp
+SRC = main.cpp caracter.cpp
 OBJ = $(SRC:.cpp=.o)
 ```
 
-- `NAME`: Le nom de l'exécutable final (`monjeu`)
+- `NAME`: Le nom de l'exécutable final (`jeu`)
 - `CC`: Le compilateur utilisé (`g++`)
 - `CFLAGS`: Les flags de compilation (warnings et standard C++17)
 - `INC`: Le chemin vers les fichiers d'en-tête (`./include`)
