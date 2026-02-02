@@ -1,33 +1,30 @@
 # Projet d'Exemple: Comprendre les Makefiles
 
-Ce projet sert d'exemple pour expliquer le fonctionnement d'un Makefile. Il s'agit d'un petit jeu nommé "monjeu" compilé en C++.
+Ce projet sert d'exemple pour expliquer le fonctionnement d'un Makefile. Il s'agit d'un petit jeu nommé "jeu" compilé en C++ avec SFML (Simple and Fast Multimedia Library).
 
 ## Structure du Makefile
 
-Le Makefile de ce projet est conçu pour compiler un jeu simple en C++ avec les fichiers suivants:
-- `main.cpp`
-- `caracter.cpp`
+Le Makefile de ce projet est conçu pour compiler un jeu simple en C++ avec les fichiers suivants situés dans le dossier `src/`:
+- `src/main.cpp`
+- `src/caracter.cpp`
 
 ## Explication du Makefile
 
 ### Variables de Configuration
 
 ```make
-NAME = jeu
-
 CC = g++
 CFLAGS = -Wall -Wextra -std=c++17 -DSFML_STATIC
 INC = -I./include
 
-SRC = main.cpp caracter.cpp
+SRC = src/main.cpp src/caracter.cpp
 OBJ = $(SRC:.cpp=.o)
 ```
 
-- `NAME`: Le nom de l'exécutable final (`jeu`)
 - `CC`: Le compilateur utilisé (`g++`)
-- `CFLAGS`: Les flags de compilation (warnings et standard C++17)
-- `INC`: Le chemin vers les fichiers d'en-tête (`./include`)
-- `SRC`: La liste des fichiers source à compiler
+- `CFLAGS`: Les flags de compilation (warnings, standard C++17 et flag SFML statique)
+- `INC`: Le chemin vers les fichiers d'en-tête (`./include` pour les headers SFML)
+- `SRC`: La liste des fichiers source à compiler situés dans le dossier `src/`
 - `OBJ`: Les fichiers objets générés à partir des fichiers source (transformation automatique de `.cpp` en `.o`)
 
 ### Règles de Compilation
@@ -36,17 +33,18 @@ OBJ = $(SRC:.cpp=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) -o $(NAME) $(CFLAGS) $(INC)
+	$(CC) $(OBJ) -o $(NAME) $(CFLAGS) $(LIB_PATH) $(INC)
 
 %.o: %.cpp
 	$(CC) -c $< -o $@ $(CFLAGS) $(INC)
 ```
 
 - `all`: La règle par défaut, qui dépend de `$(NAME)`
-- `$(NAME)`: Cette règle crée l'exécutable final en liant tous les fichiers objets
+- `$(NAME)`: Cette règle crée l'exécutable final en liant tous les fichiers objets avec les bibliothèques SFML
 - `%.o: %.cpp`: Une règle de pattern qui indique comment compiler chaque fichier `.cpp` en fichier `.o`
   - `$<`: Le nom du fichier source (la dépendance)
   - `$@`: Le nom du fichier cible (le fichier objet)
+- `$(LIB_PATH)`: Contient les bibliothèques SFML compilées statiquement
 
 ### Règles de Nettoyage
 
