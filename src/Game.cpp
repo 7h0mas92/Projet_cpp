@@ -1,0 +1,261 @@
+#include "../include/Game.hpp"
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
+
+Game::Game() 
+    : window(sf::VideoMode({800, 600}), "Snake SFML"),
+      cellSize(20),
+      cols(800 / 20),
+      rows(600 / 20),
+      snake(cols / 2, rows / 2, cols, rows),
+      food{10, 10},
+      state(GameState::Menu),
+      moveDelay(0.2f),
+      playAgain(true),
+      foodCount(0) {
+    
+    // Initialiser la graine aléatoire
+    srand(static_cast<unsigned>(time(0)));
+    
+    window.setFramerateLimit(60);
+    loadResources();
+}
+
+void Game::loadResources() {
+    // Charger l'image de fond
+    if (!backgroundTexture.loadFromFile("assets/background.png")) {
+        std::cerr << "❌ Erreur : impossible de charger assets/background.png" << std::endl;
+        std::cerr << "Vérifiez que le fichier existe dans le dossier assets/" << std::endl;
+    } else {
+        std::cout << "✅ Image chargée avec succès !" << std::endl;
+    }
+    
+    // Créer le sprite avec la texture
+    background.emplace(backgroundTexture);
+    
+    // Redimensionner l'image à la taille de la fenêtre
+    if (backgroundTexture.getSize().x > 0 && backgroundTexture.getSize().y > 0) {
+        background->setScale({800.0f / backgroundTexture.getSize().x, 
+                            600.0f / backgroundTexture.getSize().y});
+    }
+    
+    // Charger la police
+    if (!font.openFromFile("assets/arial/arial.ttf")) {
+        std::cerr << "❌ Erreur : impossible de charger assets/arial/arial.ttf" << std::endl;
+    } else {
+        std::cout << "✅ Police chargée avec succès !" << std::endl;
+    }
+}
+
+void Game::resetGame() {
+    state = GameState::Menu;
+    snake.reset(cols / 2, rows / 2);
+    food.x = 10;
+    food.y = 10;
+    moveDelay = 0.2f;
+    foodCount = 0;
+}
+
+void Game::handleEvents() {
+    switch (state) {
+        case GameState::Menu:
+            handleMenuEvents();
+            break;
+        case GameState::Playing:
+            handlePlayingEvents();
+            break;
+        case GameState::GameOver:
+            handleGameOverEvents();
+            break;
+    }
+}
+
+void Game::handleMenuEvents() {
+    while (const auto event = window.pollEvent()) {
+        if (event->is<sf::Event::Closed>()) {
+            window.close();
+            playAgain = false;
+        }
+        
+        if (const auto* keyEvent = event->getIf<sf::Event::KeyPressed>()) {
+            if (keyEvent->code == sf::Keyboard::Key::Space || 
+                keyEvent->code == sf::Keyboard::Key::Enter) {
+                state = GameState::Playing;
+                clock.restart();
+            }
+        }
+    }
+}
+
+void Game::handlePlayingEvents() {
+    while (const auto event = window.pollEvent()) {
+        if (event->is<sf::Event::Closed>()) {
+            window.close();
+        }
+        
+        if (const auto* keyEvent = event->getIf<sf::Event::KeyPressed>()) {
+            if (keyEvent->scancode == sf::Keyboard::Scan::Right) {
+                snake.setDirection(1, 0);
+            }
+            else if (keyEvent->scancode == sf::Keyboard::Scan::Left) {
+                snake.setDirection(-1, 0);
+            }
+            else if (keyEvent->scancode == sf::Keyboard::Scan::Up) {
+                snake.setDirection(0, -1);
+            }
+            else if (keyEvent->scancode == sf::Keyboard::Scan::Down) {
+                snake.setDirection(0, 1);
+            }
+        }
+    }
+}
+
+void Game::handleGameOverEvents() {
+    while (const auto event = window.pollEvent()) {
+        if (event->is<sf::Event::Closed>()) {
+            window.close();
+            playAgain = false;
+        }
+        
+        if (const auto* keyEvent = event->getIf<sf::Event::KeyPressed>()) {
+            if (keyEvent->code == sf::Keyboard::Key::Space || 
+                keyEvent->code == sf::Keyboard::Key::Enter) {
+                resetGame();  // Réinitialiser le jeu avant de retourner au menu
+            }
+        }
+    }
+}
+
+void Game::update() {
+    if (state != GameState::Playing) {
+        return;
+    }
+    
+    float elapsed = clock.getElapsedTime().asSeconds();
+    
+    if (elapsed >= moveDelay) {
+        clock.restart();
+        
+        // Déplacer le serpent
+        snake.move();
+        
+        // Gérer le wrap-around
+        snake.wrapAround();
+        
+        // Vérifier si le serpent mange la nourriture
+        if (snake.eatsFood(food)) {
+            spawnFood();
+            foodCount++;
+            
+            // Augmenter la vitesse tous les 7 aliments
+            if (foodCount >= 7) {
+                moveDelay *= 0.9f;  // Réduction de 10% du délai = 10% plus rapide
+                if (moveDelay < 0.05f) moveDelay = 0.05f;  // Limite minimale
+                foodCount = 0;
+                std::cout << "⚡ VITESSE AUGMENTÉE ! Délai: " << moveDelay << "s" << std::endl;
+            }
+        } else {
+            snake.removeTail();
+        }
+        
+        // Vérifier la collision avec soi-même
+        if (snake.checkSelfCollision()) {
+            state = GameState::GameOver;
+            std::cout << "💀 GAME OVER ! Vous avez mangé votre queue !" << std::endl;
+        }
+    }
+}
+
+void Game::spawnFood() {
+    food.x = rand() % cols;
+    food.y = rand() % rows;
+}
+
+void Game::render() {
+    window.clear();
+    
+    switch (state) {
+        case GameState::Menu:
+            renderMenu();
+            break;
+        case GameState::Playing:
+            renderPlaying();
+            break;
+        case GameState::GameOver:
+            renderGameOver();
+            break;
+    }
+    
+    window.display();
+}
+
+void Game::renderMenu() {
+    if (background) window.draw(*background);
+    
+    // Afficher un rectangle pour le menu
+    sf::RectangleShape menuBox({400, 100});
+    menuBox.setFillColor(sf::Color(0, 0, 0, 150));
+    menuBox.setPosition({200, 250});
+    window.draw(menuBox);
+    
+    // Afficher le texte du menu
+    if (font.getInfo().family != "") {
+        sf::Text menuText(font, "APPUYEZ SUR ESPACE", 25);
+        menuText.setFillColor(sf::Color::White);
+        menuText.setPosition({210, 270});
+        window.draw(menuText);
+    }
+}
+
+void Game::renderPlaying() {
+    // Dessiner le fond
+    if (background) window.draw(*background);
+    
+    // Dessiner le serpent
+    sf::RectangleShape segmentShape;
+    segmentShape.setSize({(float)cellSize, (float)cellSize});
+    segmentShape.setFillColor(sf::Color::Green);
+    
+    for (const auto& cell : snake.getBody()) {
+        segmentShape.setPosition({(float)(cell.x * cellSize), (float)(cell.y * cellSize)});
+        window.draw(segmentShape);
+    }
+    
+    // Dessiner la nourriture
+    sf::RectangleShape foodShape;
+    foodShape.setSize({(float)cellSize, (float)cellSize});
+    foodShape.setFillColor(sf::Color::Red);
+    foodShape.setPosition({(float)(food.x * cellSize), (float)(food.y * cellSize)});
+    window.draw(foodShape);
+}
+
+void Game::renderGameOver() {
+    if (background) window.draw(*background);
+    
+    // Afficher un rectangle pour le game over
+    sf::RectangleShape gameOverBox({500, 200});
+    gameOverBox.setFillColor(sf::Color(139, 0, 0, 200));
+    gameOverBox.setPosition({150, 200});
+    window.draw(gameOverBox);
+    
+    // Afficher le texte GAME OVER
+    if (font.getInfo().family != "") {
+        sf::Text gameOverText(font, "GAME OVER!", 40);
+        gameOverText.setFillColor(sf::Color::White);
+        gameOverText.setPosition({240, 220});
+        window.draw(gameOverText);
+        
+        // Afficher la taille du serpent
+        sf::Text scoreText(font, "Serpent: " + std::to_string(snake.getSize()), 20);
+        scoreText.setFillColor(sf::Color::Yellow);
+        scoreText.setPosition({240, 290});
+        window.draw(scoreText);
+        
+        // Afficher le bouton REJOUER
+        sf::Text restartText(font, "APPUYEZ SUR ESPACE POUR REJOUER", 18);
+        restartText.setFillColor(sf::Color::Cyan);
+        restartText.setPosition({180, 340});
+        window.draw(restartText);
+    }
+}
