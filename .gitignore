@@ -1,0 +1,14 @@
+# Fichiers compilés
+*.o
+*.a
+*.out
+jeu
+
+# Dossiers temporaires
+.vscode/
+.DS_Store
+
+# Fichiers de sauvegarde
+*~
+*.swp
+*.swo
