@@ -43,6 +43,11 @@ private:
     int selectedFpsIndex;  // Index dans la liste des FPS
     std::vector<int> availableFps = {60, 120, 144, 240, 360};  // Options de FPS
     
+    // Mesure des FPS en temps réel
+    int displayedFps;  // FPS actuels affichés
+    sf::Clock fpsTimer;  // Horloge pour mesurer les FPS
+    int frameCount;  // Compteur de frames
+    
     // Méthodes privées
     void loadResources();
     void handleMenuEvents();
