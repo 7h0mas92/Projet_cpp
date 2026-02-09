@@ -1,120 +1,110 @@
-# Projet d'Exemple: Comprendre les Makefiles
+# 🐍 Snake Game - SFML Edition
 
-Ce projet sert d'exemple pour expliquer le fonctionnement d'un Makefile. Il s'agit d'un petit jeu nommé "jeu" compilé en C++ avec SFML (Simple and Fast Multimedia Library).
+Un jeu Snake classique développé en C++ avec la bibliothèque SFML 3.0.
 
-## Structure du Makefile
+## 🎮 Démarrage rapide
 
-Le Makefile de ce projet est conçu pour compiler un jeu simple en C++ avec les fichiers suivants situés dans le dossier `src/`:
-- `src/main.cpp`
-- `src/caracter.cpp`
-
-## Explication du Makefile
-
-### Variables de Configuration
-
-```make
-CC = g++
-CFLAGS = -Wall -Wextra -std=c++17 -DSFML_STATIC
-INC = -I./include
-
-SRC = src/main.cpp src/caracter.cpp
-OBJ = $(SRC:.cpp=.o)
+### Sur macOS
+```bash
+brew install sfml
+git clone https://github.com/7h0mas92/Projet_cpp.git
+cd Projet_cpp
+make re
+./jeu
 ```
 
-- `CC`: Le compilateur utilisé (`g++`)
-- `CFLAGS`: Les flags de compilation (warnings, standard C++17 et flag SFML statique)
-- `INC`: Le chemin vers les fichiers d'en-tête (`./include` pour les headers SFML)
-- `SRC`: La liste des fichiers source à compiler situés dans le dossier `src/`
-- `OBJ`: Les fichiers objets générés à partir des fichiers source (transformation automatique de `.cpp` en `.o`)
+### Sur Windows
+Téléchargez SFML 3.0.2 depuis [sfml-dev.org](https://www.sfml-dev.org/download/sfml/3.0.2/) et adaptez les chemins dans le Makefile.
 
-### Règles de Compilation
-
-```make
-all: $(NAME)
-
-$(NAME): $(OBJ)
-	$(CC) $(OBJ) -o $(NAME) $(CFLAGS) $(LIB_PATH) $(INC)
-
-%.o: %.cpp
-	$(CC) -c $< -o $@ $(CFLAGS) $(INC)
+### Sur Linux
+```bash
+sudo apt-get install libsfml-dev
+git clone https://github.com/7h0mas92/Projet_cpp.git
+cd Projet_cpp
+make re
+./jeu
 ```
 
-- `all`: La règle par défaut, qui dépend de `$(NAME)`
-- `$(NAME)`: Cette règle crée l'exécutable final en liant tous les fichiers objets avec les bibliothèques SFML
-- `%.o: %.cpp`: Une règle de pattern qui indique comment compiler chaque fichier `.cpp` en fichier `.o`
-  - `$<`: Le nom du fichier source (la dépendance)
-  - `$@`: Le nom du fichier cible (le fichier objet)
-- `$(LIB_PATH)`: Contient les bibliothèques SFML compilées statiquement
+## 🎯 Comment jouer
 
-### Règles de Nettoyage
+1. **Démarrer** : Appuyez sur **ESPACE** ou **ENTRÉE**
+2. **Diriger** : Utilisez les **flèches ↑ ↓ ← →** du clavier
+3. **Manger** : Collectez les carrés rouges pour grandir
+4. **Game Over** : Évitez votre queue ! Appuyez sur **ESPACE** pour rejouer
+5. **Quitter** : Fermez la fenêtre pour quitter
 
-```make
-clean:
-	rm -f $(OBJ)
+## 📋 Pré-requis
 
-fclean: clean
-	rm -f $(NAME)
+- **C++17 ou supérieur**
+- **SFML 3.0.2** (voir instructions d'installation ci-dessus)
+- **Make** et **g++** pour la compilation
+- **Git** pour cloner le projet
 
-re: fclean all
-```
+## ✨ Fonctionnalités
 
-- `clean`: Supprime les fichiers objets
-- `fclean`: Supprime les fichiers objets et l'exécutable
-- `re`: Effectue un nettoyage complet puis recompile tout
+✅ Menu de démarrage avec instructions  
+✅ Gameplay fluide en temps réel  
+✅ Image de fond personnalisée  
+✅ Affichage du score (taille du serpent)  
+✅ Écran Game Over avec option de rejouer  
+✅ Détection de collision avec le corps  
+✅ Effet tunnel (wrap-around aux murs)  
+✅ Police personnalisée Arial  
 
-### Règles Spéciales
-
-```make
-.PHONY: all clean fclean re
-```
-
-- `.PHONY`: Indique que ces règles ne correspondent pas à des fichiers réels, mais à des actions à effectuer
-
-## Comment Utiliser ce Makefile
-
-### Prérequis
-
-- **Linux/macOS**: Make est généralement préinstallé
-- **Windows**: Vous devrez installer MSYS2 pour avoir accès à Make et aux outils de compilation
-  - Téléchargez et installez MSYS2 depuis [https://www.msys2.org/](https://www.msys2.org/)
-  - Ouvrez le terminal MSYS2 et exécutez: `pacman -S mingw-w64-x86_64-gcc make cmake ninja`
-  - Ajoutez le chemin MSYS2 à votre PATH système pour utiliser les commandes depuis le terminal Windows
-
-### Commandes
-
-1. Pour compiler le projet: `make` ou `make all`
-2. Pour nettoyer les fichiers objets: `make clean`
-3. Pour nettoyer tous les fichiers générés: `make fclean`
-4. Pour recompiler entièrement le projet: `make re`
-
-## Compilation Multi-Plateforme
-
-Ce Makefile supporte automatiquement macOS, Linux et Windows. Il détecte le système d'exploitation et utilise les bonnes bibliothèques.
-
-### Structure des Bibliothèques
-
-Les bibliothèques statiques SFML doivent être organisées comme suit:
+## 📁 Structure du projet
 
 ```
-lib/
-├── macOS/          # Bibliothèques pour macOS (.a)
-│   ├── libsfml-system.a
-│   ├── libsfml-window.a
-│   ├── libsfml-graphics.a
-│   ├── libsfml-audio.a
-│   ├── libsfml-network.a
-│   └── ... (dépendances)
-└── Windows/        # Bibliothèques pour Windows (.a avec MinGW)
-    ├── libsfml-system.a
-    ├── libsfml-window.a
-    ├── libsfml-graphics.a
-    ├── libsfml-audio.a
-    ├── libsfml-network.a
-    └── ... (dépendances)
-
+.
+├── src/
+│   ├── main.cpp          # Code principal du jeu
+│   └── caracter.cpp      # Fichier auxiliaire
+├── assets/
+│   ├── background.png    # Image de fond du jeu
+│   └── arial/
+│       └── arial.ttf     # Police Arial Unicode
+├── Makefile              # Configuration de compilation
+├── .gitignore            # Fichiers à ignorer
+└── README.md             # Ce fichier
 ```
 
-### Obtenir les Bibliothèques SFML pour Windows
+## 🛠️ Compilation et Nettoyage
+
+```bash
+make          # Compilation simple
+make re       # Recompilation complète
+make clean    # Supprime les fichiers .o
+make fclean   # Supprime les fichiers .o et l'exécutable
+```
+
+## 🔧 Troubleshooting
+
+### "Image chargée" ou "Police non chargée" (erreur au démarrage)
+Assurez-vous que vous lancez le jeu depuis le répertoire racine du projet :
+```bash
+./jeu
+```
+
+### Erreur de compilation SFML
+Vérifiez que SFML 3.0.2 est correctement installé et que les chemins dans le Makefile sont à jour.
+
+### Sur macOS avec chip M1/M2
+Installez la version ARM de SFML :
+```bash
+brew install sfml --with-arm64
+```
+
+## 📖 À propos du Makefile
+
+Le Makefile gère la compilation avec :
+- Chemins vers les bibliothèques SFML statiques (macOS)
+- Flags de compilation C++17
+- Règles de nettoyage automatique
+
+Voir `Makefile` pour plus de détails.
+
+## 👨‍💻 Auteur
+
+Projet réalisé avec C++ et SFML.
 
 Les bibliothèques statiques SFML pour Windows sont déjà incluses dans le projet dans le dossier `lib/Windows/`. Si vous devez les obtenir ou les mettre à jour:
 
