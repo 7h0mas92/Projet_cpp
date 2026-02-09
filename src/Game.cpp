@@ -266,9 +266,9 @@ void Game::renderGameOver() {
     
     // Afficher le texte GAME OVER
     if (font.getInfo().family != "") {
-        sf::Text gameOverText(font, "Oups, Pauline avait faim", 35);
+        sf::Text gameOverText(font, "GAME OVER", 40);
         gameOverText.setFillColor(sf::Color::White);
-        gameOverText.setPosition({170, 220});
+        gameOverText.setPosition({240, 220});
         window.draw(gameOverText);
         
         // Afficher la taille du serpent
