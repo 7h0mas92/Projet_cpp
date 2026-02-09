@@ -176,15 +176,6 @@ int main() {
             // On redémarre le chrono
             clock.restart();
 
-<<<<<<< HEAD
-            // collision avec les murs pour savoir si le jeu doit se terminer ou non
-            if (snake[0].x < 0 || snake[0].x >= cols ||
-                snake[0].y < 0 || snake[0].y >= rows) {
-                // TODO : gérer le game over
-            }
-            
-=======
->>>>>>> 21ea7e0bfae0d19ff6ef7eae8c7ae29b78a14f06
             // wrap autour de la grille (tunnel)
             if (snake[0].x < 0) {
                 snake[0].x = cols - 1;
@@ -201,74 +192,24 @@ int main() {
             }
 
             // 1) Nouvelle position de tête
-            Cell oldHead = snake[0];
-            snake[0].x += dirX;
-            snake[0].y += dirY;
+            snake.insert(snake.begin(), {snake[0].x + dirX, snake[0].y + dirY});
 
-<<<<<<< HEAD
-            // collision avec les murs pour savoir si le jeu doit se terminer ou non
-            if (snake[0].x < 0 || snake[0].x >= cols ||
-                snake[0].y < 0 || snake[0].y >= rows) {
-                // TODO : gérer le game over
-            }
-=======
-            // Collision avec le corps du serpent (game over)
-            for (std::size_t i = 1; i < snake.size(); ++i) {
-                if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
-                    window.close();
-                    break;
-                }
-            }
-
+            // 2) Vérifier collision avec la nourriture
             if (snake[0].x == food.x && snake[0].y == food.y) {
-            // x) faire grandir le serpent
-            // y) replacer la pomme
-
-            food.x = rand() % cols;
-            food.y = rand() % rows;
-
->>>>>>> 21ea7e0bfae0d19ff6ef7eae8c7ae29b78a14f06
-            
-            // wrap autour de la grille (tunnel)
-            if (snake[0].x < 0) {
-                snake[0].x = cols - 1;
-            }
-            else if (snake[0].x >= cols) {
-                snake[0].x = 0;
+                // Faire grandir le serpent (ne pas enlever la queue)
+                food.x = rand() % cols;
+                food.y = rand() % rows;
+            } else {
+                // Enlever la queue si on n'a pas mangé
+                snake.pop_back();
             }
 
-            if (snake[0].y < 0) {
-                snake[0].y = rows - 1;
-            }
-            else if (snake[0].y >= rows) {
-                snake[0].y = 0;
-            }
-
-            // Vérifier si la tête touche la queue
+            // 3) Vérifier si la tête touche le corps
             for (std::size_t i = 1; i < snake.size(); ++i) {
                 if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
                     gameOver = true;
                     std::cout << "💀 GAME OVER ! Vous avez mangé votre queue !" << std::endl;
                 }
-            }
-
-            if (snake[0].x == food.x && snake[0].y == food.y) {
-                // x) faire grandir le serpent
-                // y) replacer la pomme
-                food.x = rand() % cols;
-                food.y = rand() % rows;
-
-                // quand le serpent mange la pomme, on ajoute une nouvelle cellule à la fin du serpent
-                Cell tail = snake.back();
-                snake.push_back(tail);
-            }
-
-            // 2) Propager l'ancienne position le long du corps
-            Cell prev = oldHead;
-            for (std::size_t i = 1; i < snake.size(); ++i) {
-                Cell tmp = snake[i];
-                snake[i] = prev;
-                prev = tmp;
             }
         }
         
