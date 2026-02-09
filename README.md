@@ -1,6 +1,36 @@
 # 🐍 Snake Game - SFML Edition
 
-Un jeu Snake classique développé en C++ avec la bibliothèque SFML 3.0, utilisant une architecture orientée objet propre et maintenable.
+Un jeu Snake classique développé en C++ avec la bibliothèque SFML 3.0.
+
+## 📦 Bibliothèques utilisées et versions
+
+| Bibliothèque | Version | Usage | Statut |
+|---|---|---|---|
+| **SFML** | 3.0.2 | Graphiques, fenêtres, événements, audio | ✅ Statique |
+| **C++** | C++17 | Standard de compilation | ✅ Actif |
+| **g++/clang++** | 11+ | Compilateur | ✅ Requis |
+| **Make** | 3.8+ | Système de build | ✅ Requis |
+| **Git** | 2.0+ | Contrôle de version | ✅ Requis |
+
+### Dépendances SFML incluses (statiques)
+
+```
+SFML 3.0.2 modules:
+├── sfml-graphics    # Rendu 2D, sprites, textures
+├── sfml-window      # Gestion de fenêtre
+├── sfml-system      # Clock, Vector2, Time
+├── sfml-audio       # (Prêt pour future utilisation)
+└── sfml-network     # (Prêt pour future utilisation)
+
+Dépendances externes:
+├── libfreetype      # Rendu de polices
+├── libjpeg          # Décodage JPEG
+├── libpng           # Décodage PNG
+├── libogg           # Codec audio Ogg
+├── libvorbis        # Codec audio Vorbis
+├── libFLAC          # Codec audio FLAC
+└── OpenGL           # Rendering 3D (macOS/Linux)
+```
 
 ## 🎮 Démarrage rapide
 
@@ -58,7 +88,7 @@ make re
 ✅ Détection de collision avec le corps  
 ✅ Effet tunnel (wrap-around aux murs)  
 ✅ Police personnalisée Arial  
-✅ Code modulaire et facilement extensible  
+✅ Code modulaire et facilement extensible
 
 ## 📁 Structure du projet
 
@@ -101,10 +131,10 @@ class Game {
 public:
     Game();                      // Constructeur
     ~Game();                     // Destructeur
-    
+
     bool isWindowOpen() const;   // Vérifie si la fenêtre est ouverte
     bool shouldContinue() const; // Vérifie si on doit continuer
-    
+
     void handleEvents();         // Gère les événements (touches, souris, etc.)
     void update();              // Met à jour la logique du jeu
     void render();              // Dessine à l'écran
@@ -145,6 +175,7 @@ brew install sfml
 ```
 
 ## 🔨 Compiler SFML pour Windows (optionnel)
+
 ## � Compiler SFML pour Windows (optionnel)
 
 Si vous devez recompiler les bibliothèques statiques SFML pour Windows :
@@ -152,11 +183,13 @@ Si vous devez recompiler les bibliothèques statiques SFML pour Windows :
 1. **Télécharger SFML 3.0.2** depuis [https://www.sfml-dev.org/download.php](https://www.sfml-dev.org/download.php)
 
 2. **Installer les dépendances** (dans MSYS2):
+
    ```bash
    pacman -S mingw-w64-x86_64-cmake mingw-w64-x86_64-ninja
    ```
 
 3. **Compiler SFML en mode statique**:
+
    ```bash
    cd /chemin/vers/SFML-3.0.2
    cmake -S . -B build-static \
@@ -169,6 +202,7 @@ Si vous devez recompiler les bibliothèques statiques SFML pour Windows :
    ```
 
 4. **Copier les bibliothèques** dans `lib/Windows/`:
+
    ```bash
    mkdir -p /chemin/vers/Projet_cpp/lib/Windows
    cp build-static/lib/*.a /chemin/vers/Projet_cpp/lib/Windows/
@@ -183,6 +217,7 @@ Si vous devez recompiler les bibliothèques statiques SFML pour Windows :
 ## 📚 Documentation
 
 Pour plus d'informations sur SFML, consultez :
+
 - [Documentation officielle SFML](https://www.sfml-dev.org/documentation.php)
 - [Tutoriels SFML](https://www.sfml-dev.org/tutorials.php)
 
@@ -195,7 +230,54 @@ Pour plus d'informations sur SFML, consultez :
 - [ ] Sauvegardes du meilleur score
 - [ ] Modes de jeu (infini, time attack, etc.)
 
-## 👨‍💻 Auteur
+## � Répartition des tâches
+
+### Architecture et structure du code
+
+| Module | Description | Status |
+|--------|-------------|--------|
+| **src/main.cpp** | Point d'entrée du jeu | ✅ Complet |
+| **src/Game.cpp/.hpp** | Classe principale du jeu (boucle principale, événements, rendu) | ✅ Complet |
+| **src/Snake.cpp/.hpp** | Logique du serpent (mouvement, collision, croissance) | ✅ Complet |
+
+### Fonctionnalités implémentées
+
+| Feature | Description | Développeur | Status |
+|---------|-------------|-------------|--------|
+| **Menu de démarrage** | Écran titre avec instructions | ✅ | Complet |
+| **Gameplay** | Boucle de jeu, déplacement du serpent | ✅ | Complet |
+| **Nourriture** | Génération aléatoire, détection collision | ✅ | Complet |
+| **Collision corps** | Détection de collision avec la queue | ✅ | Complet |
+| **Écran Game Over** | Affichage score et option rejouer | ✅ | Complet |
+| **Graphiques** | Image de fond, polices personnalisées | ✅ | Complet |
+| **Tunnel (wrap)** | Passage à travers les murs | ✅ | Complet |
+| **Architecture OOP** | Classes Game et Snake | ✅ | Complet |
+
+### Tâches de développement complétées
+
+- ✅ Configuration SFML pour macOS/Windows/Linux
+- ✅ Makefile multi-plateforme
+- ✅ Refactorisation du code monolithique vers architecture OOP
+- ✅ Chargement des assets (images, polices)
+- ✅ Gestion des événements clavier
+- ✅ Boucle de jeu principale
+- ✅ Détection des collisions
+- ✅ Rendu graphique avec sprites
+- ✅ Script de setup automatisé (setup.sh)
+- ✅ Documentation complète (README.md)
+
+### Tests effectués
+
+- ✅ Compilation sur macOS
+- ✅ Compilation sur macOS (arm64/M1/M2)
+- ✅ Chargement des ressources (images, polices)
+- ✅ Gameplay basique
+- ✅ Collisions et game over
+- ✅ Rejeu après game over
+- ⚠️ Compilation sur Windows (à vérifier)
+- ⚠️ Compilation sur Linux (bibliothèques manquantes)
+
+## �👨‍💻 Auteur
 
 Projet réalisé avec C++ et SFML.
 
