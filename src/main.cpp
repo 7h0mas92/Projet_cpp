@@ -176,12 +176,15 @@ int main() {
             // On redémarre le chrono
             clock.restart();
 
+<<<<<<< HEAD
             // collision avec les murs pour savoir si le jeu doit se terminer ou non
             if (snake[0].x < 0 || snake[0].x >= cols ||
                 snake[0].y < 0 || snake[0].y >= rows) {
                 // TODO : gérer le game over
             }
             
+=======
+>>>>>>> 21ea7e0bfae0d19ff6ef7eae8c7ae29b78a14f06
             // wrap autour de la grille (tunnel)
             if (snake[0].x < 0) {
                 snake[0].x = cols - 1;
@@ -202,11 +205,29 @@ int main() {
             snake[0].x += dirX;
             snake[0].y += dirY;
 
+<<<<<<< HEAD
             // collision avec les murs pour savoir si le jeu doit se terminer ou non
             if (snake[0].x < 0 || snake[0].x >= cols ||
                 snake[0].y < 0 || snake[0].y >= rows) {
                 // TODO : gérer le game over
             }
+=======
+            // Collision avec le corps du serpent (game over)
+            for (std::size_t i = 1; i < snake.size(); ++i) {
+                if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
+                    window.close();
+                    break;
+                }
+            }
+
+            if (snake[0].x == food.x && snake[0].y == food.y) {
+            // x) faire grandir le serpent
+            // y) replacer la pomme
+
+            food.x = rand() % cols;
+            food.y = rand() % rows;
+
+>>>>>>> 21ea7e0bfae0d19ff6ef7eae8c7ae29b78a14f06
             
             // wrap autour de la grille (tunnel)
             if (snake[0].x < 0) {
