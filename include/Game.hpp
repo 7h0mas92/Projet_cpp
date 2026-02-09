@@ -8,6 +8,7 @@
 // Énumération pour les différents états du jeu
 enum class GameState {
     Menu,
+    FpsSelection,
     Playing,
     GameOver
 };
@@ -37,16 +38,24 @@ private:
     bool playAgain;
     int foodCount;  // Compteur de nourritures mangées
     
+    // Gestion des FPS
+    int currentFps;  // FPS actuels (60, 120, 144, 240, 360)
+    int selectedFpsIndex;  // Index dans la liste des FPS
+    std::vector<int> availableFps = {60, 120, 144, 240, 360};  // Options de FPS
+    
     // Méthodes privées
     void loadResources();
     void handleMenuEvents();
+    void handleFpsSelectionEvents();
     void handlePlayingEvents();
     void handleGameOverEvents();
     void renderMenu();
+    void renderFpsSelection();
     void renderPlaying();
     void renderGameOver();
     void resetGame();
     void spawnFood();
+    void setFps(int fps);
 
 public:
     // Constructeur

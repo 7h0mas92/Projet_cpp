@@ -13,12 +13,14 @@ Game::Game()
       state(GameState::Menu),
       moveDelay(0.2f),
       playAgain(true),
-      foodCount(0) {
+      foodCount(0),
+      currentFps(60),
+      selectedFpsIndex(0) {
     
     // Initialiser la graine aléatoire
     srand(static_cast<unsigned>(time(0)));
     
-    window.setFramerateLimit(60);
+    setFps(60);  // Démarrer avec 60 FPS
     loadResources();
 }
 
@@ -62,6 +64,9 @@ void Game::handleEvents() {
         case GameState::Menu:
             handleMenuEvents();
             break;
+        case GameState::FpsSelection:
+            handleFpsSelectionEvents();
+            break;
         case GameState::Playing:
             handlePlayingEvents();
             break;
@@ -81,8 +86,7 @@ void Game::handleMenuEvents() {
         if (const auto* keyEvent = event->getIf<sf::Event::KeyPressed>()) {
             if (keyEvent->code == sf::Keyboard::Key::Space || 
                 keyEvent->code == sf::Keyboard::Key::Enter) {
-                state = GameState::Playing;
-                clock.restart();
+                state = GameState::FpsSelection;  // Aller au menu de sélection des FPS
             }
         }
     }
@@ -179,6 +183,9 @@ void Game::render() {
         case GameState::Menu:
             renderMenu();
             break;
+        case GameState::FpsSelection:
+            renderFpsSelection();
+            break;
         case GameState::Playing:
             renderPlaying();
             break;
@@ -258,4 +265,79 @@ void Game::renderGameOver() {
         restartText.setPosition({180, 340});
         window.draw(restartText);
     }
+}
+
+void Game::setFps(int fps) {
+    currentFps = fps;
+    window.setFramerateLimit(fps);
+}
+
+void Game::handleFpsSelectionEvents() {
+    while (const auto event = window.pollEvent()) {
+        if (event->is<sf::Event::Closed>()) {
+            window.close();
+            playAgain = false;
+            return;
+        }
+        
+        if (const auto* keyEvent = event->getIf<sf::Event::KeyPressed>()) {
+            // Flèches gauche/droite pour naviguer les FPS
+            if (keyEvent->code == sf::Keyboard::Key::Right && 
+                selectedFpsIndex < (int)availableFps.size() - 1) {
+                selectedFpsIndex++;
+            } else if (keyEvent->code == sf::Keyboard::Key::Left && selectedFpsIndex > 0) {
+                selectedFpsIndex--;
+            }
+            // ESPACE ou ENTRÉE pour confirmer et commencer
+            else if (keyEvent->code == sf::Keyboard::Key::Space || 
+                     keyEvent->code == sf::Keyboard::Key::Enter) {
+                setFps(availableFps[selectedFpsIndex]);
+                state = GameState::Playing;
+                clock.restart();
+                return;
+            }
+        }
+    }
+}
+
+void Game::renderFpsSelection() {
+    window.clear();
+    if (background) {
+        window.draw(*background);
+    }
+    
+    // Afficher un rectangle pour le menu des FPS
+    sf::RectangleShape fpsBox({600, 300});
+    fpsBox.setFillColor(sf::Color(0, 0, 0, 200));
+    fpsBox.setPosition({100, 150});
+    window.draw(fpsBox);
+    
+    // Titre
+    sf::Text titleText(font, "CHOISIR LES FPS", 40);
+    titleText.setFillColor(sf::Color::White);
+    titleText.setPosition({200, 170});
+    window.draw(titleText);
+    
+    // Afficher les options de FPS
+    std::string fpsLine = "";
+    for (size_t i = 0; i < availableFps.size(); i++) {
+        if ((int)i == selectedFpsIndex) {
+            fpsLine += " ► " + std::to_string(availableFps[i]) + " FPS ◄ ";
+        } else {
+            fpsLine += "   " + std::to_string(availableFps[i]) + " FPS   ";
+        }
+    }
+    
+    sf::Text fpsText(font, fpsLine, 24);
+    fpsText.setFillColor(sf::Color::Yellow);
+    fpsText.setPosition({120, 250});
+    window.draw(fpsText);
+    
+    // Instructions
+    sf::Text instructText(font, "◄ Flèches ► | ESPACE pour valider", 16);
+    instructText.setFillColor(sf::Color::Cyan);
+    instructText.setPosition({150, 350});
+    window.draw(instructText);
+    
+    window.display();
 }
