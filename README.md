@@ -4,13 +4,13 @@ Un jeu Snake classique développé en C++ avec la bibliothèque SFML 3.0.
 
 ## 📦 Bibliothèques utilisées et versions
 
-| Bibliothèque | Version | Usage | Statut |
-|---|---|---|---|
-| **SFML** | 3.0.2 | Graphiques, fenêtres, événements, audio | ✅ Statique |
-| **C++** | C++17 | Standard de compilation | ✅ Actif |
-| **g++/clang++** | 11+ | Compilateur | ✅ Requis |
-| **Make** | 3.8+ | Système de build | ✅ Requis |
-| **Git** | 2.0+ | Contrôle de version | ✅ Requis |
+| Bibliothèque    | Version | Usage                                   | Statut      |
+| --------------- | ------- | --------------------------------------- | ----------- |
+| **SFML**        | 3.0.2   | Graphiques, fenêtres, événements, audio | ✅ Statique |
+| **C++**         | C++17   | Standard de compilation                 | ✅ Actif    |
+| **g++/clang++** | 11+     | Compilateur                             | ✅ Requis   |
+| **Make**        | 3.8+    | Système de build                        | ✅ Requis   |
+| **Git**         | 2.0+    | Contrôle de version                     | ✅ Requis   |
 
 ### Dépendances SFML incluses (statiques)
 
@@ -234,24 +234,24 @@ Pour plus d'informations sur SFML, consultez :
 
 ### Architecture et structure du code
 
-| Module | Description | Status |
-|--------|-------------|--------|
-| **src/main.cpp** | Point d'entrée du jeu | ✅ Complet |
-| **src/Game.cpp/.hpp** | Classe principale du jeu (boucle principale, événements, rendu) | ✅ Complet |
-| **src/Snake.cpp/.hpp** | Logique du serpent (mouvement, collision, croissance) | ✅ Complet |
+| Module                 | Description                                                     | Status     |
+| ---------------------- | --------------------------------------------------------------- | ---------- |
+| **src/main.cpp**       | Point d'entrée du jeu                                           | ✅ Complet |
+| **src/Game.cpp/.hpp**  | Classe principale du jeu (boucle principale, événements, rendu) | ✅ Complet |
+| **src/Snake.cpp/.hpp** | Logique du serpent (mouvement, collision, croissance)           | ✅ Complet |
 
 ### Fonctionnalités implémentées
 
-| Feature | Description | Développeur | Status |
-|---------|-------------|-------------|--------|
-| **Menu de démarrage** | Écran titre avec instructions | ✅ | Complet |
-| **Gameplay** | Boucle de jeu, déplacement du serpent | ✅ | Complet |
-| **Nourriture** | Génération aléatoire, détection collision | ✅ | Complet |
-| **Collision corps** | Détection de collision avec la queue | ✅ | Complet |
-| **Écran Game Over** | Affichage score et option rejouer | ✅ | Complet |
-| **Graphiques** | Image de fond, polices personnalisées | ✅ | Complet |
-| **Tunnel (wrap)** | Passage à travers les murs | ✅ | Complet |
-| **Architecture OOP** | Classes Game et Snake | ✅ | Complet |
+| Feature               | Description                               | Développeur | Status  |
+| --------------------- | ----------------------------------------- | ----------- | ------- |
+| **Menu de démarrage** | Écran titre avec instructions             | ✅          | Complet |
+| **Gameplay**          | Boucle de jeu, déplacement du serpent     | ✅          | Complet |
+| **Nourriture**        | Génération aléatoire, détection collision | ✅          | Complet |
+| **Collision corps**   | Détection de collision avec la queue      | ✅          | Complet |
+| **Écran Game Over**   | Affichage score et option rejouer         | ✅          | Complet |
+| **Graphiques**        | Image de fond, polices personnalisées     | ✅          | Complet |
+| **Tunnel (wrap)**     | Passage à travers les murs                | ✅          | Complet |
+| **Architecture OOP**  | Classes Game et Snake                     | ✅          | Complet |
 
 ### Tâches de développement complétées
 
